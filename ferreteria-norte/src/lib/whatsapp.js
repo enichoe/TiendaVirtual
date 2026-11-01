@@ -30,6 +30,25 @@ const PEN = new Intl.NumberFormat('es-PE', {
 });
 
 /**
+ * Normaliza cualquier número de teléfono al formato internacional requerido por WhatsApp (sin '+', espacios ni guiones).
+ * Si se ingresa un celular de Perú de 9 dígitos (ej. 987654321), le antepone automáticamente el código internacional de país 51.
+ *
+ * @param {string|number} phone - Número de teléfono
+ * @returns {string} Número normalizado con código de país (ej. '51987654321')
+ */
+export function normalizePhone(phone) {
+  let clean = String(phone || '').replace(/\D/g, '');
+  if (!clean) return '';
+
+  // Si tiene 9 dígitos y empieza en 9 (formato de celular nacional en Perú), anteponer código de país 51
+  if (clean.length === 9 && clean.startsWith('9')) {
+    clean = `51${clean}`;
+  }
+
+  return clean;
+}
+
+/**
  * Genera el enlace de WhatsApp listo para abrir el chat con el pedido.
  *
  * @param {Object} params - Parámetros del pedido
@@ -39,19 +58,20 @@ const PEN = new Intl.NumberFormat('es-PE', {
  * @param {string} params.customer.telefono - Celular de contacto del comprador
  * @param {Array<{product: Object, quantity: number}>} params.items - Artículos en el carrito
  * @param {number} params.total - Importe total a pagar
- * @param {string} params.phone - Número de WhatsApp del negocio (ej. '51987654321')
+ * @param {string} params.phone - Número de WhatsApp del negocio (ej. '51987654321' o '987654321')
  * @param {string} [params.storeName='Ferretería Norte'] - Nombre comercial de la tienda
  * @returns {string} URL formateada (https://wa.me/...) lista para window.open()
  */
 export function buildWhatsAppUrl({ customer, items, total, phone, storeName = 'Ferretería Norte' }) {
-  // WhatsApp espera el número internacional únicamente en dígitos (sin '+', espacios ni guiones)
-  const normalizedPhone = String(phone || '').replace(/\D/g, '');
+  // Normaliza el teléfono asegurando formato internacional
+  const normalizedPhone = normalizePhone(phone);
 
-  if (!normalizedPhone) {
+  if (!normalizedPhone || normalizedPhone.length < 9) {
     throw new Error(
-      'Configura VITE_WHATSAPP_NUMBER con el número internacional del negocio (ej. 51987654321).'
+      'Configura VITE_WHATSAPP_NUMBER en .env.local con el número de WhatsApp de tu negocio (ej. 51987654321 o 987654321).'
     );
   }
+
 
   // Estructura del mensaje en formato WhatsApp Markdown
   const lines = [

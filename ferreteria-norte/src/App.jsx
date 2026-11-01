@@ -41,8 +41,8 @@ import { sampleCategories, sampleProducts } from './data/products';
 import { paymentDetails } from './data/paymentDetails';
 // Cliente de Supabase (puede ser null si no esta configurado)
 import { supabase } from './lib/supabase';
-// Funcion que construye el URL de WhatsApp con el pedido formateado
-import { buildWhatsAppUrl } from './lib/whatsapp';
+// Funcion que construye el URL de WhatsApp con el pedido formateado y normalizador
+import { buildWhatsAppUrl, normalizePhone } from './lib/whatsapp';
 
 /* ─── Utilidades ──────────────────────────────────────────── */
 
@@ -52,6 +52,10 @@ const money = (n) =>
 
 /** Nombre de la tienda, configurable desde variables de entorno (.env) */
 const storeName = import.meta.env.VITE_STORE_NAME || 'Ferreteria Norte';
+
+/** Número de WhatsApp del negocio normalizado internacionalmente */
+const whatsappNumber = normalizePhone(import.meta.env.VITE_WHATSAPP_NUMBER || '51987654321');
+
 
 /* ─── Componente principal ────────────────────────────────── */
 
@@ -249,7 +253,7 @@ function App() {
         customer,
         items: cart,
         total,
-        phone: import.meta.env.VITE_WHATSAPP_NUMBER,
+        phone: whatsappNumber,
         storeName,
       });
 
@@ -693,8 +697,8 @@ function App() {
             </p>
             <a
               className="light-btn"
-              /* Construye la URL de WhatsApp con numero limpio (solo digitos) */
-              href={`https://wa.me/${String(import.meta.env.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '')}?text=${encodeURIComponent('Hola, necesito asesoria para mi proyecto.')}`}
+              /* Construye la URL de WhatsApp con numero normalizado internacional */
+              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hola, necesito asesoria para mi proyecto.')}`}
               target="_blank"
               rel="noreferrer"
             >
@@ -784,7 +788,7 @@ function App() {
           </div>
           <a
             className="outline-btn"
-            href={`https://wa.me/${String(import.meta.env.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '')}?text=${encodeURIComponent('Hola, tengo una consulta sobre un producto.')}`}
+            href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hola, tengo una consulta sobre un producto.')}`}
             target="_blank"
             rel="noreferrer"
           >
