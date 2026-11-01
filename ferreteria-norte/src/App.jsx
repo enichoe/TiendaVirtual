@@ -28,9 +28,12 @@ import {
   Check, ChevronDown,
   Menu, Minus,
   PackageCheck, Plus,
-  Search, ShieldCheck, ShoppingBag,
+  Search, Settings, ShieldCheck, ShoppingBag,
   Truck, X, Zap, Heart,
 } from 'lucide-react';
+
+// Panel de Administración para gestión de productos
+import AdminPanel from './AdminPanel';
 
 // Datos de muestra (se reemplazan si Supabase esta configurado)
 import { sampleCategories, sampleProducts } from './data/products';
@@ -77,6 +80,7 @@ function App() {
   const [cartOpen,     setCartOpen]     = useState(false); // Drawer del carrito
   const [checkoutOpen, setCheckoutOpen] = useState(false); // Modal de checkout
   const [productOpen,  setProductOpen]  = useState(null);  // Modal de detalle (null = cerrado)
+  const [adminOpen,    setAdminOpen]    = useState(false); // Vista del Panel de Administracion
 
   /* --- Estado de notificaciones --- */
   const [notice, setNotice] = useState(''); // Mensaje del toast
@@ -273,6 +277,30 @@ function App() {
 
   /* ─── Renderizado ──────────────────────────────────────────── */
 
+  // Si el panel de administración está activo, renderizamos la vista de gestión
+  if (adminOpen) {
+    return (
+      <>
+        <AdminPanel
+          products={products}
+          setProducts={setProducts}
+          categories={categories}
+          onClose={() => setAdminOpen(false)}
+          showNotice={(msg) => {
+            setNotice(msg);
+            setTimeout(() => setNotice(''), 3500);
+          }}
+        />
+        {notice && (
+          <div className="toast">
+            <Check size={16} />
+            <span>{notice}</span>
+          </div>
+        )}
+      </>
+    );
+  }
+
   return (
     <>
       {/* ══════════════════════════════════════════════════
@@ -327,6 +355,17 @@ function App() {
               ¿Necesitas ayuda?
               <b>Estamos para orientarte</b>
             </a>
+
+            {/* Acceso rápido a Administración */}
+            <button
+              className="header-admin-btn"
+              onClick={() => setAdminOpen(true)}
+              title="Panel de Administración (Gestión de productos)"
+              aria-label="Abrir panel de administración"
+            >
+              <Settings size={15} />
+              <span>Admin</span>
+            </button>
 
             {/* Boton de menu movil (visible solo en mobile) */}
             <button
@@ -775,7 +814,12 @@ function App() {
         <div className="wrap footer-bottom">
           <span>© 2026 {storeName}. Todos los derechos reservados.</span>
           <span>Catalogo sujeto a disponibilidad. Precios en soles (S/).</span>
-          <span>Hecho para tus proyectos <span className="footer-star">✦</span></span>
+          <button
+            onClick={() => setAdminOpen(true)}
+            style={{ background: 'none', border: 'none', color: 'var(--ink-muted)', cursor: 'pointer', fontSize: '10px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+          >
+            ⚙️ Panel Administrador
+          </button>
         </div>
       </footer>
 

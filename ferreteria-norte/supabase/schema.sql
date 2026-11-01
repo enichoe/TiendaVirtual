@@ -58,15 +58,23 @@ for each row execute function public.set_updated_at();
 alter table public.categorias enable row level security;
 alter table public.productos enable row level security;
 
--- Política: Visitantes y usuarios autenticados pueden LEER categorías activas
+-- Política: Visitantes y clientes pueden LEER categorías y productos
 drop policy if exists "Public can read active categories" on public.categorias;
 create policy "Public can read active categories" on public.categorias
-for select to anon, authenticated using (activa = true);
+for select to anon, authenticated using (true);
 
--- Política: Visitantes y usuarios autenticados pueden LEER productos activos
 drop policy if exists "Public can read active products" on public.productos;
 create policy "Public can read active products" on public.productos
-for select to anon, authenticated using (activo = true);
+for select to anon, authenticated using (true);
+
+-- Política: Permisos de modificación para el Panel de Administración (INSERT, UPDATE, DELETE)
+drop policy if exists "Admin manage products" on public.productos;
+create policy "Admin manage products" on public.productos
+for all to anon, authenticated using (true) with check (true);
+
+drop policy if exists "Admin manage categories" on public.categorias;
+create policy "Admin manage categories" on public.categorias
+for all to anon, authenticated using (true) with check (true);
 
 -- 7. INSERTAR CATEGORÍAS POR DEFECTO
 insert into public.categorias (id, nombre, icono, orden) values
