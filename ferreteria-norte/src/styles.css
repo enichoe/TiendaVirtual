@@ -1,0 +1,1743 @@
+/* ============================================================
+   FERRETERIA NORTE - Design System v2.0
+   ============================================================
+   Estructura:
+   1. Variables / Design Tokens
+   2. Reset y Base
+   3. Tipografia
+   4. Utilidades globales
+   5. Announcement bar
+   6. Header y Navegacion
+   7. Hero section
+   8. Service strip (beneficios)
+   9. Categorias
+   10. Productos
+   11. Banner de proyecto
+   12. Seccion de pagos
+   13. Seccion de ayuda / CTA
+   14. Footer
+   15. Carrito (drawer lateral)
+   16. Checkout modal
+   17. Modal de producto
+   18. Toast notification
+   19. Estados vacios y loading
+   20. Animaciones y keyframes
+   21. Responsive Tablet (900px)
+   22. Responsive Mobile (650px)
+   23. Accesibilidad (prefers-reduced-motion)
+   ============================================================ */
+
+/* ============================================================
+   1. VARIABLES / DESIGN TOKENS
+   Centraliza todos los valores de diseno para facil mantenimiento.
+   Para cambiar el tema, solo edita estas variables.
+   ============================================================ */
+:root {
+  /* Paleta principal (modo oscuro elegante) */
+  --bg-base:       #0d0f0e;                /* Fondo principal - negro verdoso */
+  --bg-card:       #141716;               /* Fondo de tarjetas */
+  --bg-elevated:   #1a1d1b;              /* Superficies elevadas */
+  --bg-glass:      rgba(20,23,22,0.72);  /* Glassmorphism */
+
+  /* Texto */
+  --ink:           #e8ede9;              /* Texto primario */
+  --ink-muted:     #7a8578;             /* Texto secundario */
+  --ink-faint:     #4a514d;            /* Texto muy tenue */
+
+  /* Acentos de marca */
+  --accent:        #a8ff6b;            /* Verde lima vibrante - color principal de marca */
+  --accent-dim:    #6db840;           /* Variante mas oscura */
+  --accent-glow:   rgba(168,255,107,0.18); /* Resplandor del acento */
+
+  /* Colores de estado */
+  --green-dark:    #1a4a2e;           /* Fondo de botones primarios */
+  --green-mid:     #2d6b44;          /* Hover de botones */
+  --line:          rgba(255,255,255,0.07);    /* Bordes sutiles */
+  --line-strong:   rgba(255,255,255,0.12);   /* Bordes mas visibles */
+
+  /* Semanticos */
+  --success:  #a8ff6b;
+  --warning:  #ffd166;
+  --error:    #ff6b6b;
+
+  /* Espaciado base - escala consistente de 8px */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  40px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+
+  /* Radios de borde */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* Sombras */
+  --shadow-sm:   0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md:   0 4px 16px rgba(0,0,0,.5), 0 2px 4px rgba(0,0,0,.3);
+  --shadow-lg:   0 16px 48px rgba(0,0,0,.6), 0 4px 12px rgba(0,0,0,.4);
+  --shadow-glow: 0 0 40px var(--accent-glow);
+
+  /* Curvas de animacion */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+
+  /* Duraciones */
+  --dur-fast: 150ms;
+  --dur-mid:  250ms;
+  --dur-slow: 400ms;
+
+  /* Tipografia base */
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--bg-base);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   2. RESET Y BASE
+   Normaliza estilos entre navegadores
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+body {
+  min-width: 320px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* Scrollbar personalizada para WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: var(--line-strong); border-radius: var(--radius-full); }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+a      { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+img    { display: block; max-width: 100%; }
+ul, ol { list-style: none; }
+
+/* ============================================================
+   3. TIPOGRAFIA
+   ============================================================ */
+
+/* Clase para fuente display en titulares */
+.font-display { font-family: 'Space Grotesk', sans-serif; }
+
+/* Eyebrow: etiqueta de seccion pequena, uppercase con punto de acento */
+.eyebrow {
+  font-size: 9px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+/* Punto luminoso decorativo del eyebrow */
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 8px var(--accent);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   4. UTILIDADES GLOBALES
+   ============================================================ */
+
+/* Contenedor centrado de ancho maximo */
+.wrap {
+  width: min(1280px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+/* Boton primario (CTA principal) - verde lima vibrante */
+.primary-btn {
+  border: none;
+  background: var(--accent);
+  color: #0d1a0f;
+  border-radius: var(--radius-sm);
+  min-height: 48px;
+  padding: 0 var(--space-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: all var(--dur-mid) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Destello de brillo al pasar el cursor */
+.primary-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+}
+
+.primary-btn:hover {
+  background: #c4ff8a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(168,255,107,0.35);
+}
+.primary-btn:hover::after { opacity: 1; }
+.primary-btn:active { transform: translateY(0); }
+
+/* Modificador: ancho completo (para drawers y formularios) */
+.full-btn { width: 100%; }
+
+/* Boton outline: secundario, borde visible */
+.outline-btn {
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  padding: 12px var(--space-lg);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: all var(--dur-mid) var(--ease-out);
+}
+.outline-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+/* Boton de texto: sin fondo ni borde */
+.text-btn {
+  border: none;
+  background: none;
+  color: var(--accent);
+  display: inline-flex;
+  gap: var(--space-sm);
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  transition: opacity var(--dur-fast);
+}
+.text-btn:hover { opacity: 0.75; }
+
+/* ============================================================
+   5. ANNOUNCEMENT BAR
+   Barra informativa superior (envios, noticias, etc.)
+   Usa degradado y animacion de shimmer para llamar la atencion
+   ============================================================ */
+.announcement {
+  min-height: 36px;
+  padding: 8px var(--space-lg);
+  background: linear-gradient(90deg, #0a1a10 0%, #0e1f14 50%, #0a1a10 100%);
+  border-bottom: 1px solid var(--line);
+  color: #8fad7a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto shimmer: destello animado que recorre la barra */
+.announcement::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(168,255,107,0.04), transparent);
+  animation: shimmer 4s infinite;
+}
+
+.announcement a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-left: var(--space-sm);
+  transition: opacity var(--dur-fast);
+}
+.announcement a:hover { opacity: 0.8; }
+.announcement-dot { color: var(--accent); font-size: 12px; }
+
+/* ============================================================
+   6. HEADER Y NAVEGACION
+   Header fijo con efecto glassmorphism
+   ============================================================ */
+.site-header {
+  background: rgba(13,15,14,0.92);
+  /* Desenfoque del contenido detras del header (glassmorphism) */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: box-shadow var(--dur-mid);
+}
+
+/* Clase que se agrega con JS al hacer scroll para reforzar sombra */
+.site-header.scrolled {
+  box-shadow: 0 4px 32px rgba(0,0,0,0.6);
+}
+
+.header-main {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+
+/* --- Logo / Marca --- */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 700 22px/1 'Space Grotesk', sans-serif;
+  letter-spacing: -1.2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Cuadrado verde con emoji de la marca */
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--accent);
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  color: #0d1a0f;
+  font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 0 16px rgba(168,255,107,0.3);
+}
+
+.brand-name {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.brand-name span { line-height: 1; }
+.brand-name em { font-style: normal; color: var(--accent); }
+.brand-name small {
+  display: block;
+  font: 600 7px/1 'Inter', sans-serif;
+  letter-spacing: 2px;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+
+/* --- Buscador --- */
+.searchbox {
+  height: 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  color: var(--ink-muted);
+  flex: 0 1 480px;
+  transition: all var(--dur-mid) var(--ease-out);
+}
+
+/* Resaltar el buscador cuando tiene foco */
+.searchbox:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: var(--bg-card);
+}
+
+.searchbox svg { flex-shrink: 0; width: 16px; height: 16px; }
+.searchbox input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 12px;
+  color: var(--ink);
+}
+.searchbox input::placeholder { color: var(--ink-faint); }
+.searchbox kbd {
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 9px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* --- Acciones del header (ayuda y carrito) --- */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  flex-shrink: 0;
+}
+
+.help-link { font-size: 10px; color: var(--ink-muted); line-height: 1.4; }
+.help-link b { display: block; color: var(--ink); font-size: 11px; font-weight: 600; }
+
+/* Boton del carrito con badge de conteo */
+.cart-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elevated);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  transition: all var(--dur-mid) var(--ease-out);
+}
+.cart-trigger:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+/* Badge circular con el numero de items */
+.cart-trigger i {
+  font-style: normal;
+  background: var(--accent);
+  color: #0d1a0f;
+  border-radius: var(--radius-full);
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* Boton hamburguesa: solo visible en mobile */
+.mobile-menu {
+  display: none;
+  border: none;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  color: var(--ink);
+}
+
+/* --- Barra de navegacion secundaria --- */
+.nav-bar { border-top: 1px solid var(--line); }
+
+.nav-inner {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-categories {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.nav-inner button,
+.nav-inner a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  transition: color var(--dur-fast);
+  white-space: nowrap;
+}
+.nav-inner button:hover,
+.nav-inner a:hover { color: var(--accent); }
+
+/* "Todas las categorias" siempre resaltado */
+.all-cats { font-weight: 700; color: var(--ink) !important; }
+
+/* ============================================================
+   7. HERO SECTION
+   Seccion principal con titulo, texto y panel visual.
+   Usa un grid de 2 columnas: texto a la izquierda, imagen a la derecha.
+   ============================================================ */
+.hero {
+  padding-top: 80px;
+  padding-bottom: 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  align-items: center;
+  min-height: 520px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Circulo de resplandor decorativo en el fondo */
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,255,107,0.06) 0%, transparent 70%);
+  top: -200px; right: -100px;
+  pointer-events: none;
+  animation: pulse-glow 6s ease-in-out infinite;
+}
+
+.hero-copy { position: relative; z-index: 1; }
+
+.hero-copy h1 {
+  font: 800 clamp(42px, 5vw, 72px)/0.95 'Space Grotesk', sans-serif;
+  letter-spacing: -3px;
+  color: var(--ink);
+  margin-bottom: var(--space-lg);
+}
+
+/* Texto em con degradado verde como efecto premium */
+.hero-copy h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--accent) 0%, #6db840 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-muted);
+  max-width: 340px;
+  margin-bottom: var(--space-xl);
+}
+
+.hero-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+  color: var(--ink-faint);
+  font-size: 9px;
+  letter-spacing: 0.5px;
+}
+.hero-foot > span:first-child { font-weight: 700; color: var(--ink-muted); }
+.hero-foot i { font-style: normal; color: var(--line-strong); padding: 0 4px; }
+.hero-line { width: 40px; height: 1px; background: var(--line-strong); }
+
+/* Panel visual: contenedor de imagen con efectos */
+.hero-art {
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.hero-art > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* luminosity mezcla la imagen con el fondo oscuro */
+  mix-blend-mode: luminosity;
+  filter: contrast(1.1) saturate(0.7);
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.hero-art:hover > img { transform: scale(1.04); }
+
+/* Overlay de degradado sobre la imagen */
+.hero-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(13,15,14,0.5) 0%, transparent 50%),
+    linear-gradient(0deg, rgba(13,15,14,0.7) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* Badge flotante con info del producto destacado */
+.hero-stamp {
+  position: absolute;
+  z-index: 2;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  background: rgba(168,255,107,0.15);
+  border: 1px solid rgba(168,255,107,0.3);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.2;
+}
+.hero-stamp span   { font-size: 8px; letter-spacing: 1.5px; display: block; }
+.hero-stamp strong { font: 700 18px/1 'Space Grotesk'; display: block; margin: 4px 0; }
+
+/* Etiqueta en el borde inferior de la imagen */
+.hero-caption {
+  position: absolute;
+  z-index: 2;
+  bottom: var(--space-lg);
+  left: var(--space-lg);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.hero-caption span   { font-size: 8px; letter-spacing: 2px; color: var(--ink-muted); }
+.hero-caption strong { font: 600 22px/1 'Space Grotesk'; letter-spacing: -0.5px; }
+
+/* ============================================================
+   8. SERVICE STRIP (Beneficios)
+   Fila de 4 paneles con los puntos diferenciadores del negocio
+   ============================================================ */
+.service-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  margin-block: var(--space-xl);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.service-strip > div {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-xl);
+  border-right: 1px solid var(--line);
+  transition: background var(--dur-fast);
+}
+.service-strip > div:last-child { border-right: none; }
+.service-strip > div:hover { background: var(--bg-elevated); }
+
+/* Iconos en color acento */
+.service-strip svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  flex-shrink: 0;
+}
+.service-strip span { display: flex; flex-direction: column; gap: 3px; }
+.service-strip b     { font-size: 11px; font-weight: 700; color: var(--ink); }
+.service-strip small { font-size: 9px; color: var(--ink-muted); }
+
+/* ============================================================
+   9. SECCION DE CATEGORIAS
+   Grid de tarjetas clicables para filtrar por categoria
+   ============================================================ */
+.category-section { padding-top: var(--space-3xl); }
+
+.section-head,
+.products-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--space-lg);
+}
+
+.section-head h2,
+.products-head h2 {
+  font: 700 28px/1.1 'Space Grotesk', sans-serif;
+  letter-spacing: -1px;
+  color: var(--ink);
+  margin-top: 6px;
+}
+
+.section-head > a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 11px;
+  color: var(--ink-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 6px;
+  transition: color var(--dur-fast);
+}
+.section-head > a:hover { color: var(--accent); border-color: var(--accent); }
+
+/* Grid de tarjetas de categoria */
+.category-list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-top: var(--space-lg);
+}
+
+/* Tarjeta de categoria individual */
+.category {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  height: 100px;
+  text-align: left;
+  color: var(--ink-muted);
+  transition: all var(--dur-mid) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Circulo de brillo interno que aparece al hover */
+.category::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 80%, var(--accent-glow), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--dur-mid);
+}
+
+.category:hover,
+.category.active {
+  border-color: var(--accent);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 0 1px var(--accent);
+}
+.category:hover::before,
+.category.active::before { opacity: 1; }
+
+.cat-icon { font-size: 22px; line-height: 1; }
+.category > span:nth-child(2) { font-size: 10px; font-weight: 600; color: inherit; }
+.category > svg { opacity: 0; transition: opacity var(--dur-mid); color: var(--accent); }
+.category:hover > svg,
+.category.active > svg { opacity: 1; }
+
+/* ============================================================
+   10. SECCION DE PRODUCTOS
+   Grid de tarjetas de producto con efectos de hover premium
+   ============================================================ */
+.products-section { padding-top: var(--space-3xl); }
+
+/* Controles de ordenamiento */
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  color: var(--ink-faint);
+  font-size: 10px;
+}
+.sort-control label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-muted);
+}
+.sort-control select {
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 10px;
+  outline: none;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+/* Grid de 4 columnas por defecto */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg) 14px;
+}
+
+.product-card { min-width: 0; }
+
+/* Contenedor de imagen del producto (aspect ratio 3:4, tipo tarjeta vertical) */
+.product-image {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--dur-mid) var(--ease-out);
+}
+
+.product-image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-out);
+  mix-blend-mode: luminosity;
+  filter: saturate(0.8);
+}
+
+/* Zoom suave al pasar el cursor */
+.product-card:hover .product-image { border-color: var(--line-strong); }
+.product-card:hover .product-image > img { transform: scale(1.06); }
+
+/* Etiqueta de producto (ej: "Mas vendido", "Precio especial") */
+.product-tag {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  background: var(--accent);
+  color: #0d1a0f;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+
+/* Boton de corazon (favorito) con efecto glassmorphism */
+.heart-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-full);
+  background: rgba(13,15,14,0.7);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  color: var(--ink-muted);
+  transition: all var(--dur-fast);
+  cursor: pointer;
+}
+.heart-button:hover {
+  background: rgba(255,100,100,0.2);
+  border-color: rgba(255,100,100,0.5);
+  color: #ff6b6b;
+}
+.heart-button svg { width: 14px; }
+
+/* Texto "Ver detalles" que emerge al pasar el cursor */
+.quick-view {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: rgba(168,255,107,0.9);
+  color: #0d1a0f;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  opacity: 0;
+  transition: all var(--dur-mid) var(--ease-out);
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+}
+.product-card:hover .quick-view {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Fila de metadatos: categoria y stock */
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  font-size: 8px;
+  letter-spacing: 0.8px;
+}
+
+/* Indicador de disponibilidad con punto de color */
+.in-stock,
+.out-stock {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+.in-stock  { color: var(--accent); }
+.out-stock { color: var(--warning); }
+
+/* Punto circular del indicador de stock */
+.in-stock i,
+.out-stock i,
+.stock-detail i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  font-style: normal;
+  background: currentColor;
+  display: inline-block;
+}
+
+/* Nombre del producto como boton */
+.product-title {
+  background: none;
+  border: none;
+  padding: 6px 0 0;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+  min-height: 38px;
+  transition: color var(--dur-fast);
+  width: 100%;
+  cursor: pointer;
+}
+.product-title:hover { color: var(--accent); }
+
+/* Fila inferior: precio y boton agregar */
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-sm);
+}
+.product-bottom > div {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.product-bottom strong { font-size: 15px; font-weight: 700; color: var(--ink); }
+
+/* Precio anterior tachado */
+.product-bottom del,
+.modal-price del {
+  font-size: 10px;
+  color: var(--ink-faint);
+  text-decoration-color: var(--ink-faint);
+}
+
+/* Boton "+" para agregar al carrito */
+.add-button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  color: var(--ink-muted);
+  transition: all var(--dur-mid) var(--ease-out);
+}
+.add-button:hover {
+  background: var(--accent);
+  color: #0d1a0f;
+  border-color: var(--accent);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(168,255,107,0.4);
+}
+
+/* Indicador de carga del catalogo (mientras conecta con Supabase) */
+.loading-note {
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: 12px;
+  padding: var(--space-xl);
+}
+
+/* Estado vacio cuando no hay resultados de busqueda */
+.empty-results {
+  text-align: center;
+  padding: 64px 10px var(--space-xl);
+  color: var(--ink-muted);
+  grid-column: 1 / -1;
+}
+.empty-results > span   { font-size: 48px; display: block; margin-bottom: var(--space-md); }
+.empty-results h3       { font: 700 24px 'Space Grotesk'; color: var(--ink); margin-bottom: var(--space-sm); }
+.empty-results p        { font-size: 12px; line-height: 1.6; margin-bottom: var(--space-md); }
+
+/* ============================================================
+   11. BANNER DE PROYECTO
+   Seccion de CTA para proyectos grandes con enlace a WhatsApp.
+   Usa un fondo oscuro elegante con decoracion de luz sutil.
+   ============================================================ */
+.project-banner {
+  margin-top: var(--space-3xl);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: linear-gradient(135deg, #0e1f14 0%, #0a1a0f 60%, #061209 100%);
+  border: 1px solid rgba(168,255,107,0.15);
+  position: relative;
+}
+
+/* Decoracion: circulo de luz difusa en la esquina */
+.project-banner::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,255,107,0.08), transparent 70%);
+  top: -100px; left: -100px;
+  pointer-events: none;
+}
+
+.project-copy { padding: var(--space-2xl); }
+.project-copy .eyebrow { color: var(--accent-dim); }
+.project-copy h2 {
+  font: 700 36px/0.97 'Space Grotesk';
+  letter-spacing: -1.5px;
+  color: var(--ink);
+  margin-bottom: var(--space-md);
+}
+.project-copy > p:not(.eyebrow) {
+  max-width: 320px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-lg);
+}
+
+/* Boton estilo WhatsApp para el CTA */
+.light-btn {
+  background: var(--accent);
+  color: #0d1a0f;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 13px var(--space-lg);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  transition: all var(--dur-mid) var(--ease-out);
+}
+.light-btn:hover {
+  background: #c4ff8a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(168,255,107,0.4);
+}
+
+.project-visual {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+}
+.project-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.6) contrast(1.1);
+  opacity: 0.6;
+  transition: transform var(--dur-slow);
+}
+.project-banner:hover .project-visual img { transform: scale(1.04); }
+.project-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #0e1f14 0%, transparent 60%), linear-gradient(0deg, rgba(6,18,9,0.4), transparent);
+}
+.project-visual span {
+  position: absolute;
+  z-index: 1;
+  right: 8%; top: 15%;
+  font: 700 28px/0.9 'Space Grotesk';
+  letter-spacing: -0.8px;
+  color: rgba(168,255,107,0.8);
+  transform: rotate(4deg);
+}
+
+/* ============================================================
+   12. SECCION DE PAGOS
+   Dos columnas: descripcion a la izquierda, tarjetas a la derecha.
+   ============================================================ */
+.payments-section {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 8%;
+  padding-block: var(--space-3xl);
+  border-top: 1px solid var(--line);
+  margin-top: var(--space-3xl);
+}
+
+.payments-section h2 {
+  font: 700 32px/1.05 'Space Grotesk';
+  letter-spacing: -1.2px;
+  color: var(--ink);
+  margin-top: 6px;
+}
+
+.payments-lede {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  max-width: 290px;
+  margin-top: var(--space-md);
+}
+
+/* Grid de tarjetas de metodo de pago (2 columnas) */
+.payment-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  align-content: center;
+}
+
+.payment-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  transition: border-color var(--dur-mid);
+}
+.payment-card:hover { border-color: var(--accent); }
+
+.payment-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  font: 700 14px 'Space Grotesk';
+  margin-bottom: var(--space-md);
+}
+.bank-mark   { background: rgba(168,255,107,0.15); color: var(--accent); }
+.wallet-mark { background: rgba(168,255,107,0.1);  color: var(--accent-dim); }
+
+.payment-card h3 { font: 600 13px 'Space Grotesk'; margin-bottom: 6px; color: var(--ink); }
+.payment-card small {
+  display: block;
+  font-size: 9px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+  margin-top: 8px;
+}
+
+/* Nota de seguridad: ocupa ambas columnas del grid */
+.payment-note {
+  grid-column: span 2;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: rgba(168,255,107,0.06);
+  border: 1px solid rgba(168,255,107,0.15);
+  border-radius: var(--radius-sm);
+  padding: 12px var(--space-md);
+  color: var(--accent-dim);
+}
+.payment-note svg { flex-shrink: 0; margin-top: 2px; }
+.payment-note p   { margin: 0; font-size: 10px; line-height: 1.5; }
+
+/* Listas de bancos y billeteras dentro de las tarjetas de pago */
+.bank-list,
+.wallet-list {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0;
+}
+.bank-list > div {
+  display: grid;
+  gap: 2px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--line);
+}
+.bank-list b, .wallet-list b   { font-size: 9px; color: var(--ink); }
+.bank-list span, .wallet-list span { font-size: 8px; color: var(--ink-muted); }
+
+.wallet-list { grid-template-columns: 1fr 1fr; gap: 8px; }
+.wallet-list > div { display: flex; flex-direction: column; gap: 3px; }
+
+/* ============================================================
+   13. SECCION DE AYUDA (CTA WHATSAPP)
+   Barra horizontal con llamada a la accion para contacto rapido
+   ============================================================ */
+.newsletter {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: var(--space-xl) 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xl);
+}
+.newsletter h2 { font: 700 20px 'Space Grotesk'; color: var(--ink); margin-top: 6px; }
+.newsletter p:not(.eyebrow) { font-size: 11px; color: var(--ink-muted); margin-top: 4px; line-height: 1.6; }
+
+/* ============================================================
+   14. FOOTER
+   ============================================================ */
+.footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-xl);
+}
+.footer-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-lg);
+  gap: var(--space-lg);
+}
+.footer-brand { font-size: 18px; }
+.footer-main > span { font-size: 11px; color: var(--ink-muted); }
+.footer-main > a:last-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--ink-muted);
+  transition: color var(--dur-fast);
+}
+.footer-main > a:last-child:hover { color: var(--accent); }
+.footer-main > a:last-child svg   { transform: rotate(135deg); }
+
+.footer-bottom {
+  border-top: 1px solid var(--line);
+  padding: 12px 0 var(--space-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--ink-faint);
+  font-size: 9px;
+  gap: var(--space-md);
+}
+.footer-star { color: var(--accent); font-size: 12px; }
+
+/* ============================================================
+   15. CARRITO (DRAWER LATERAL)
+   Panel que se desliza desde la derecha.
+   Usa el overlay para bloquear el contenido detras.
+   ============================================================ */
+
+/* Overlay oscuro de fondo que bloquea la pagina */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+  backdrop-filter: blur(4px);
+  animation: fade-in var(--dur-mid) var(--ease-out);
+}
+
+/* Panel deslizante */
+.cart-drawer {
+  width: min(460px, 100%);
+  height: 100%;
+  background: var(--bg-card);
+  border-left: 1px solid var(--line);
+  padding: var(--space-xl) var(--space-xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  animation: slide-in var(--dur-mid) var(--ease-out);
+}
+
+/* Encabezado del panel con titulo y boton de cierre */
+.drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+.drawer-head .eyebrow { margin-bottom: 6px; }
+.drawer-head h2 {
+  font: 700 22px 'Space Grotesk';
+  letter-spacing: -0.8px;
+  color: var(--ink);
+  margin: 0;
+}
+.drawer-head h2 span { font: 500 14px 'Inter'; color: var(--ink-muted); }
+
+/* Boton de cierre de paneles y modales */
+.close-btn {
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elevated);
+  color: var(--ink-muted);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  transition: all var(--dur-fast);
+  flex-shrink: 0;
+}
+.close-btn:hover {
+  border-color: var(--error);
+  color: var(--error);
+  background: rgba(255,107,107,0.1);
+}
+
+/* Lista scrolleable de items del carrito */
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+
+/* Fila de un producto en el carrito */
+.cart-row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: var(--space-md);
+  align-items: start;
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--line);
+}
+.cart-row > img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+}
+.cart-row-info { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.cart-row-info > b    { font-size: 11px; font-weight: 600; color: var(--ink); }
+.cart-row-info > span { font-size: 11px; color: var(--ink-muted); }
+.cart-row > strong    { font-size: 12px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+
+/* Control de cantidad +/- en cada item */
+.qty-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-top: 6px;
+}
+.qty-control button {
+  width: 26px;
+  height: 24px;
+  border: none;
+  background: var(--bg-elevated);
+  display: grid;
+  place-items: center;
+  color: var(--ink-muted);
+  transition: all var(--dur-fast);
+}
+.qty-control button:hover { background: var(--accent); color: #0d1a0f; }
+.qty-control span { width: 26px; text-align: center; font-size: 11px; font-weight: 600; }
+
+/* Resumen de totales del carrito */
+.cart-summary {
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-md);
+  margin-top: var(--space-sm);
+}
+.subtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.subtotal strong { font-size: 18px; font-weight: 700; color: var(--ink); }
+.cart-summary > small {
+  display: block;
+  font-size: 9px;
+  color: var(--ink-faint);
+  margin: 6px 0 var(--space-md);
+}
+
+/* Boton "seguir comprando" sin fondo */
+.continue-btn {
+  background: none;
+  border: none;
+  width: 100%;
+  font-size: 11px;
+  color: var(--ink-muted);
+  padding: 12px;
+  margin-top: 4px;
+  transition: color var(--dur-fast);
+}
+.continue-btn:hover { color: var(--ink); }
+
+/* Estado de carrito vacio */
+.cart-empty {
+  margin: auto;
+  text-align: center;
+  max-width: 260px;
+}
+.cart-empty > span {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line-strong);
+  display: grid;
+  place-items: center;
+  color: var(--ink-muted);
+  margin: 0 auto var(--space-lg);
+}
+.cart-empty h3 { font: 700 20px 'Space Grotesk'; color: var(--ink); margin-bottom: 6px; }
+.cart-empty p  { font-size: 12px; color: var(--ink-muted); line-height: 1.6; margin-bottom: var(--space-lg); }
+
+/* ============================================================
+   16. CHECKOUT MODAL
+   Ventana modal centrada para confirmar el pedido.
+   El overlay reutiliza el mismo .overlay del carrito, pero
+   el contenido se centra con margin:auto en lugar de alinearse al borde.
+   ============================================================ */
+.checkout-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--line-strong);
+  width: min(480px, calc(100% - 24px));
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  margin: auto;
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: scale-in var(--dur-mid) var(--ease-out);
+}
+.checkout-intro {
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--ink-muted);
+  margin: var(--space-md) 0 var(--space-lg);
+}
+
+/* Formulario de datos de envio */
+.checkout-form { display: flex; flex-direction: column; gap: var(--space-md); }
+.checkout-form > label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.checkout-form input {
+  height: 44px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  padding: 0 var(--space-md);
+  font-size: 12px;
+  outline: none;
+  border-radius: var(--radius-sm);
+  transition: all var(--dur-mid);
+}
+.checkout-form input::placeholder { color: var(--ink-faint); }
+.checkout-form input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: var(--bg-card);
+}
+
+/* Fila de total con estilo destacado */
+.checkout-total {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: var(--space-md) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+.checkout-total b { font-size: 20px; font-weight: 800; color: var(--ink); }
+
+/* Nota de metodo de pago */
+.checkout-payment {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(168,255,107,0.06);
+  border: 1px solid rgba(168,255,107,0.12);
+  border-radius: var(--radius-sm);
+  color: var(--accent-dim);
+  padding: 10px var(--space-md);
+  font-size: 10px;
+}
+.checkout-legal {
+  text-align: center;
+  color: var(--ink-faint);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   17. MODAL DE DETALLE DE PRODUCTO
+   Modal de pantalla completa con imagen y datos del producto.
+   Grid de 2 columnas: imagen | informacion
+   ============================================================ */
+.product-modal {
+  position: relative;
+  margin: auto;
+  width: min(780px, calc(100% - 28px));
+  background: var(--bg-card);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  min-height: 420px;
+  box-shadow: var(--shadow-lg);
+  animation: scale-in var(--dur-mid) var(--ease-out);
+}
+.modal-close { position: absolute; right: 14px; top: 14px; z-index: 2; }
+.modal-image { min-height: 420px; background: var(--bg-elevated); position: relative; overflow: hidden; }
+.modal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: luminosity;
+  filter: saturate(0.7);
+}
+.modal-info {
+  padding: var(--space-2xl) var(--space-xl) var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+.modal-info h2 { font: 700 24px/1.1 'Space Grotesk'; letter-spacing: -0.8px; color: var(--ink); }
+.modal-description { font-size: 12px; line-height: 1.7; color: var(--ink-muted); }
+.modal-price { font-size: 24px; font-weight: 800; color: var(--ink); display: flex; align-items: center; gap: 10px; margin: var(--space-sm) 0; }
+.stock-detail { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--ink-muted); margin-bottom: var(--space-md); }
+.modal-info > small { display: block; margin-top: var(--space-sm); text-align: center; font-size: 9px; color: var(--ink-faint); }
+
+/* ============================================================
+   18. TOAST NOTIFICATION
+   Notificacion temporal tipo "snackbar" que aparece abajo
+   cuando el usuario agrega un item al carrito.
+   ============================================================ */
+.toast {
+  position: fixed;
+  z-index: 300;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-elevated);
+  border: 1px solid var(--accent);
+  color: var(--ink);
+  padding: 12px var(--space-lg);
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md), 0 0 20px var(--accent-glow);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  animation: toast-in var(--dur-mid) var(--ease-out);
+}
+.toast svg { color: var(--accent); }
+
+/* ============================================================
+   20. KEYFRAMES
+   Todas las animaciones del sistema. Separadas aqui para
+   facil referencia y modificacion futura.
+   ============================================================ */
+
+/* Entrada del drawer lateral desde la derecha */
+@keyframes slide-in {
+  from { transform: translateX(24px); opacity: 0.6; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* Aparicion del overlay de fondo */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Aparicion escalada de modales (como un "pop") */
+@keyframes scale-in {
+  from { transform: scale(0.96) translateY(8px); opacity: 0; }
+  to   { transform: scale(1)    translateY(0);   opacity: 1; }
+}
+
+/* Entrada del toast desde abajo */
+@keyframes toast-in {
+  from { transform: translateX(-50%) translateY(12px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);    opacity: 1; }
+}
+
+/* Destello de la announcement bar de izquierda a derecha */
+@keyframes shimmer {
+  0%   { left: -100%; }
+  100% { left: 150%; }
+}
+
+/* Resplandor pulsante del fondo del hero */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.05); }
+}
+
+/* ============================================================
+   21. RESPONSIVE - TABLET (900px y menos)
+   ============================================================ */
+@media (max-width: 900px) {
+  .wrap { width: calc(100% - 36px); }
+  .header-main { gap: var(--space-md); }
+  .help-link { display: none; }
+  .hero { padding-block: var(--space-2xl); min-height: 420px; }
+  .hero-copy h1 { font-size: 48px; }
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .service-strip > div { padding-inline: var(--space-md); }
+  .service-strip small { font-size: 8px; }
+  .nav-categories { gap: var(--space-lg); }
+  .payments-section { grid-template-columns: 1fr; gap: var(--space-xl); }
+}
+
+/* ============================================================
+   22. RESPONSIVE - MOBILE (650px y menos)
+   ============================================================ */
+@media (max-width: 650px) {
+  .wrap { width: calc(100% - 32px); }
+
+  /* Announcement bar mas compacta */
+  .announcement { font-size: 8px; gap: 6px; min-height: 30px; }
+  .announcement-dot { display: none; }
+
+  /* Header adaptado: buscador en segunda fila */
+  .header-main {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    gap: 10px;
+  }
+  .searchbox { order: 4; flex: 1 1 100%; max-width: none; height: 38px; }
+  .header-actions { gap: 10px; margin-left: auto; }
+
+  /* Ocultar texto del carrito en mobile */
+  .cart-trigger span { display: none; }
+  .cart-trigger { padding: 7px 10px; }
+
+  /* Mostrar boton hamburguesa en mobile */
+  .mobile-menu { display: grid; }
+
+  /* Nav horizontal con scroll */
+  .nav-inner { height: 38px; }
+  .nav-categories { overflow-x: auto; scrollbar-width: none; gap: var(--space-lg); }
+  .nav-categories::-webkit-scrollbar { display: none; }
+  .nav-categories button { display: none; }
+
+  /* Hero en columna unica */
+  .hero {
+    grid-template-columns: 1fr;
+    padding-block: var(--space-xl);
+    gap: var(--space-xl);
+  }
+  .hero::before { width: 300px; height: 300px; }
+  .hero-copy h1 { font-size: 44px; letter-spacing: -2.5px; }
+  .hero-sub { font-size: 12px; }
+  .hero-foot { display: none; }
+  .hero-art { aspect-ratio: 16/9; }
+  .hero-stamp { padding: 8px 10px; }
+
+  /* Service strip de 2 columnas */
+  .service-strip { grid-template-columns: 1fr 1fr; gap: 0; }
+  .service-strip > div { padding: var(--space-md); border-right: none; border-bottom: 1px solid var(--line); }
+  .service-strip > div:nth-child(odd) { border-right: 1px solid var(--line); }
+  .service-strip > div:nth-child(3),
+  .service-strip > div:nth-child(4) { border-bottom: none; }
+
+  /* Categorias: 3 columnas en mobile */
+  .category-section { padding-top: var(--space-2xl); }
+  .category-list { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .category { height: 88px; }
+
+  /* Productos: 2 columnas en mobile */
+  .products-section { padding-top: var(--space-2xl); }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-lg) 10px; }
+
+  /* Banner de proyecto en columna */
+  .project-banner { grid-template-columns: 1fr; }
+  .project-copy { padding: var(--space-xl); }
+  .project-copy h2 { font-size: 28px; }
+  .project-visual { min-height: 200px; }
+  .project-visual span { font-size: 20px; }
+
+  /* Pagos en columna unica */
+  .payments-section { grid-template-columns: 1fr; gap: var(--space-xl); padding-block: var(--space-2xl); }
+  .payment-grid { grid-template-columns: 1fr; }
+  .payment-note { grid-column: 1; }
+
+  /* CTA de ayuda en columna */
+  .newsletter { flex-direction: column; align-items: flex-start; gap: var(--space-lg); }
+
+  /* Footer compacto */
+  .footer-main { flex-wrap: wrap; gap: 10px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 5px; }
+
+  /* Ajustes de drawer y modales */
+  .cart-drawer { padding: var(--space-lg) var(--space-md) var(--space-md); }
+  .checkout-modal { padding: var(--space-lg); border-radius: var(--radius-md); }
+  .product-modal { grid-template-columns: 1fr; max-height: calc(100vh - 24px); overflow-y: auto; }
+  .modal-image { min-height: 220px; height: 220px; }
+  .modal-info { padding: var(--space-lg); }
+  .modal-info h2 { font-size: 20px; }
+  .modal-price { font-size: 20px; }
+}
+
+/* ============================================================
+   23. ACCESIBILIDAD
+   Desactiva animaciones para usuarios que prefieren menos movimiento.
+   Importante para personas con condiciones vestibulares.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
